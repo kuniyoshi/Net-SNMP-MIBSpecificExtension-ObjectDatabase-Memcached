@@ -199,7 +199,7 @@ sub update_database {
     my $db_ref    = $self->db;
     my @processes = @{ $self->{processes} };
 
-    $db_ref->{ $self->get_child_oid( ".1.1" ) } = {
+    $db_ref->{ $self->get_child_oid( ".1.1.0" ) } = {
         value => scalar( @processes ),
         type  => INTEGER,
     };
