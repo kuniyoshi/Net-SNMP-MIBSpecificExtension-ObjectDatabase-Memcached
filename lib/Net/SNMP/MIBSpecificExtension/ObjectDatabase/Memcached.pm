@@ -29,6 +29,44 @@ my %TYPE = (
     limit_maxbytes        => INTEGER,
     threads               => INTEGER,
 );
+my %INDEX = (
+    pid                   => 2,
+    uptime                => 3,
+    time                  => 4,
+    version               => 5,
+    pointer_size          => 6,
+    rusage_user           => 7,
+    rusage_system         => 8,
+    curr_items            => 9,
+    total_items           => 10,
+    bytes                 => 11,
+    curr_connections      => 12,
+    total_connections     => 13,
+    connection_structures => 14,
+    cmd_flush             => 18,
+    cmd_get               => 16,
+    cmd_set               => 17,
+    get_hits              => 20,
+    get_misses            => 21,
+    delete_misses         => 22,
+    delete_hits           => 23,
+    incr_misses           => 24,
+    incr_hits             => 25,
+    decr_misses           => 26,
+    decr_hists            => 27,
+    cas_misses            => 28,
+    cas_hists             => 29,
+    cas_badval            => 30,
+    auth_cmds             => 33,
+    auth_errors           => 34,
+    evictions             => 35,
+    bytes_read            => 37,
+    bytes_written         => 38,
+    limit_maxbytes        => 39,
+    threads               => 40,
+    conn_yields           => 41,
+    reclaimed             => 36,
+);
 
 sub time_to_live { shift->{time_to_live} }
 
@@ -150,74 +188,16 @@ sub read_stats {
     return %stats;
 }
 
-sub __get_first_index { # Can not `prereq` List::MoreUtils module, write sub myself :<
-    my( $list_ref, $target ) = @_;
-    for ( my $i = 0; $i < @{ $list_ref }; $i++ ) {
-        if ( $list_ref->[ $i ] eq $target ) {
-            return $i;
-        }
-    }
-    return;
-}
-
 sub get_child_oid {
     my $self = shift;
     my $oid  = shift;
     return $self->base_oid . $oid;
 }
 
-sub get_index {
-    my $self = shift;
-    my $name = shift;
-    return {
-        pid                   => 2,
-        uptime                => 3,
-        time                  => 4,
-        version               => 5,
-        pointer_size          => 6,
-        rusage_user           => 7,
-        rusage_system         => 8,
-        curr_items            => 9,
-        total_items           => 10,
-        bytes                 => 11,
-        curr_connections      => 12,
-        total_connections     => 13,
-        connection_structures => 14,
-        cmd_flush             => 18,
-        cmd_get               => 16,
-        cmd_set               => 17,
-        get_hits              => 20,
-        get_misses            => 21,
-        delete_misses         => 22,
-        delete_hits           => 23,
-        incr_misses           => 24,
-        incr_hits             => 25,
-        decr_misses           => 26,
-        decr_hists            => 27,
-        cas_misses            => 28,
-        cas_hists             => 29,
-        cas_badval            => 30,
-        auth_cmds             => 33,
-        auth_errors           => 34,
-        evictions             => 35,
-        bytes_read            => 37,
-        bytes_written         => 38,
-        limit_maxbytes        => 39,
-        threads               => 40,
-        conn_yields           => 41,
-        reclaimed             => 36,
-    }->{ $name };
-}
-
-# .1 <- process count
-# .2.1.1 <- 1
-# .2.1.2 <- 2
-# .2.2.1 <- pid of first process
-
 sub update_database {
     my $self = shift;
-    my $db_ref        = $self->db;
-    my @processes     = @{ $self->{processes} };
+    my $db_ref    = $self->db;
+    my @processes = @{ $self->{processes} };
 
     $db_ref->{ $self->get_child_oid( ".1" ) } = {
         value => scalar( @processes ),
@@ -236,7 +216,7 @@ sub update_database {
         };
 
         for my $key ( keys %stats ) {
-            my $index = $self->get_index( $key )
+            my $index = $INDEX{ $key }
                 or next;
             my $oid = $self->get_child_oid( ".2.1.$index.$j" );
             $db_ref->{ $oid } = {
@@ -275,6 +255,16 @@ sub __uniq { # Can not `prereq` List::MoreUtils module, write sub myself :<
     my @list = @_;
     my %count;
     return grep { !$count{ $_ }++ } @list;
+}
+
+sub __get_first_index { # Can not `prereq` List::MoreUtils module, write sub myself :<
+    my( $list_ref, $target ) = @_;
+    for ( my $i = 0; $i < @{ $list_ref }; $i++ ) {
+        if ( $list_ref->[ $i ] eq $target ) {
+            return $i;
+        }
+    }
+    return;
 }
 
 sub get_next_oid {
