@@ -74,7 +74,7 @@ sub connection_timeout { shift->{connection_timeout} }
 
 sub add_processes {
     my $self = shift;
-    chomp( my @pids = `pgrep memcached` );
+    chomp( my @pids = `pgrep -x memcached` );
 
     for my $pid ( @pids ) {
         open my $FH, "<", "/proc/$pid/cmdline"
