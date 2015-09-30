@@ -199,7 +199,7 @@ sub update_database {
     my $db_ref    = $self->db;
     my @processes = @{ $self->{processes} };
 
-    $db_ref->{ $self->get_child_oid( ".1" ) } = {
+    $db_ref->{ $self->get_child_oid( ".1.1" ) } = {
         value => scalar( @processes ),
         type  => INTEGER,
     };
@@ -210,7 +210,7 @@ sub update_database {
 
         my $j = $i + 1;
 
-        $db_ref->{ $self->get_child_oid( ".2.1.$j" ) } = {
+        $db_ref->{ $self->get_child_oid( ".1.2.1.$j" ) } = {
             value => $j,
             type  => INTEGER,
         };
@@ -218,7 +218,7 @@ sub update_database {
         for my $key ( keys %stats ) {
             my $index = $INDEX{ $key }
                 or next;
-            my $oid = $self->get_child_oid( ".2.1.$index.$j" );
+            my $oid = $self->get_child_oid( ".1.2.$index.$j" );
             $db_ref->{ $oid } = {
                 value => $stats{ $key },
                 type  => $TYPE{ $key } || COUNTER,
