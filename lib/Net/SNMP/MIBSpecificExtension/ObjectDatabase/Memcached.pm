@@ -99,6 +99,9 @@ sub add_processes {
             }
         }
 
+        $option{l} ||= "127.0.0.1";
+        $option{p} ||= 11211;
+
         push @{ $self->{processes} }, \%option;
     }
 
@@ -142,8 +145,8 @@ sub read_stats {
     my $self        = shift;
     my $process_ref = shift;
 
-    my $host = $process_ref->{l} || "127.0.0.1";
-    my $port = $process_ref->{p} || 11211;
+    my $host = $process_ref->{l};
+    my $port = $process_ref->{p};
 
     my $proto = getprotobyname( "tcp" );
     socket( my $SH, PF_INET, SOCK_STREAM, $proto )
@@ -231,12 +234,34 @@ sub update_database {
     return;
 }
 
+sub set_settings_to_db {
+    my $self   = shift;
+    my $db_ref = $self->db;
+    my @processes = @{ $self->{processes} };
+
+    for my $i ( 0 .. $#processes ) {
+        my $proces_ref = $processes[ $i ];
+        my $j = $i + 1;
+        $db_ref->{ $self->get_child_oid( ".1.3.1.$j" ) } = {
+            value => $j,
+            type  => INTEGER,
+        };
+        $db_ref->{ $self->get_child_oid( ".1.3.4.$j" ) } = {
+            value => $proces_ref->{p},
+            type  => INTEGER,
+        };
+    }
+
+    return;
+}
+
 sub get {
     my $self = shift;
     my $oid  = shift;
 
     if ( $self->does_update_needed ) {
         $self->update_database;
+        $self->set_settings_to_db;
     }
 
     return $self->SUPER::get( $oid );
