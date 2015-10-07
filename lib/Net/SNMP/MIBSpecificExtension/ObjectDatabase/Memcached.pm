@@ -191,6 +191,7 @@ sub read_stats {
 
     if ( $stats{get_hits} && $stats{get_misses} ) {
         $stats{hit_rate} = $stats{get_hits} / ( $stats{get_hits} + $stats{get_misses} );
+        $stats{hit_rate} = int( $stats{hit_rate} * 1000 ); # to be permil
     }
 
     return %stats;
