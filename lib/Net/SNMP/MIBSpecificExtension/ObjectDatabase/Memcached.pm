@@ -66,6 +66,7 @@ my %INDEX = (
     threads               => 40,
     conn_yields           => 41,
     reclaimed             => 36,
+    hit_rate              => 101,
 );
 
 sub time_to_live { shift->{time_to_live} }
@@ -187,6 +188,10 @@ sub read_stats {
 
     close $SH
         or die "Could not close a socket of $host:$port: $!";
+
+    if ( $stats{get_hits} && $stats{get_misses} ) {
+        $stats{hit_rate} = $stats{get_hits} / ( $stats{get_hits} + $stats{get_misses} );
+    }
 
     return %stats;
 }
