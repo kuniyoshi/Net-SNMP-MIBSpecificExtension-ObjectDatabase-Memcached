@@ -28,6 +28,7 @@ my %TYPE = (
     connection_structures => GAUGE,
     limit_maxbytes        => INTEGER,
     threads               => INTEGER,
+    hit_rate              => GAUGE,
 );
 my %INDEX = (
     pid                   => 2,
