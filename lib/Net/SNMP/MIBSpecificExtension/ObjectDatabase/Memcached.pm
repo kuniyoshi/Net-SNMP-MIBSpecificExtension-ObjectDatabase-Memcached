@@ -70,6 +70,8 @@ my %INDEX = (
 my %UNIT = (
     bytes          => "M",
     limit_maxbytes => "M",
+    bytes_read     => "k",
+    bytes_written  => "k",
 );
 
 sub time_to_live { shift->{time_to_live} }
@@ -201,6 +203,11 @@ sub read_stats {
 
         if ( $unit eq "M" ) {
             $value /= 1024 * 1024;
+            $value = int $value;
+            $stats{ $united_key } = $value;
+        }
+        elsif ( $unit eq "k" ) {
+            $value /= 1024;
             $value = int $value;
             $stats{ $united_key } = $value;
         }
