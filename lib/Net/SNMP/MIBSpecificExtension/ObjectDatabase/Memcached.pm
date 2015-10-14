@@ -67,6 +67,10 @@ my %INDEX = (
     conn_yields           => 41,
     reclaimed             => 36,
 );
+my %UNIT = (
+    bytes          => "M",
+    limit_maxbytes => "M",
+);
 
 sub time_to_live { shift->{time_to_live} }
 
@@ -187,6 +191,20 @@ sub read_stats {
 
     close $SH
         or die "Could not close a socket of $host:$port: $!";
+
+    for my $united_key ( keys %UNIT ) {
+        next
+            unless exists $stats{ $united_key };
+
+        my $value = $stats{ $united_key };
+        my $unit  = $UNIT{ $united_key };
+
+        if ( $unit eq "M" ) {
+            $value /= 1024 * 1024;
+            $value = int $value;
+            $stats{ $united_key } = $value;
+        }
+    }
 
     return %stats;
 }
