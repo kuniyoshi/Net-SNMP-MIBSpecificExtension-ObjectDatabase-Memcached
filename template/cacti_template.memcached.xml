@@ -1,0 +1,132 @@
+<interface>
+	<name>memcached Statistics</name>
+	<description>Get memcached statistics</description>
+	<oid_index>[% GET base_oid %].1.2.1</oid_index>
+	<oid_num_indexes>[% GET base_oid %].1.1.0</oid_num_indexes>
+	<index_order>msPort:mgpIndex</index_order>
+	<index_order_type>numeric</index_order_type>
+
+	<fields>
+		<mgpIndex>
+			<name>Index</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>input</direction>
+			<oid>[% GET base_oid %].1.2.1</oid>
+		</mgpIndex>
+		<msPort>
+			<name>Port Number</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>input</direction>
+			<oid>[% GET base_oid %].1.3.4</oid>
+		</msPort>
+
+		<mgpRusageUser>
+			<name>rusage user</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.7</oid>
+		</mgpRusageUser>
+		<mgpRusageSystem>
+			<name>rusage system</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.8</oid>
+		</mgpRusageSystem>
+		<mgpTotalItems>
+			<name>total items</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.10</oid>
+		</mgpTotalItems>
+		<mgpBytes>
+			<name>bytes</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.11</oid>
+		</mgpBytes>
+		<mgpCurrConnections>
+			<name>current connections</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.12</oid>
+		</mgpCurrConnections>
+		<mgpTotalConnections>
+			<name>total connections</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.13</oid>
+		</mgpTotalConnections>
+		<mgpCmdGet>
+			<name>cmd get</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.16</oid>
+		</mgpCmdGet>
+		<mgpCmdSet>
+			<name>cmd set</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.17</oid>
+		</mgpCmdSet>
+		<mgpGetHits>
+			<name>get hits</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.20</oid>
+		</mgpGetHits>
+		<mgpGetMisses>
+			<name>get hits</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.21</oid>
+		</mgpGetMisses>
+		<mgpReclaimed>
+			<name>reclaimed</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.35</oid>
+		</mgpReclaimed>
+		<mgpEvictions>
+			<name>evictions</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.36</oid>
+		</mgpEvictions>
+		<mgpBytesRead>
+			<name>bytes read</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.37</oid>
+		</mgpBytesRead>
+		<mgpBytesWritten>
+			<name>bytes written</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.38</oid>
+		</mgpBytesWritten>
+		<mgpLimitMaxbytes>
+			<name>limit max bytes</name>
+			<method>walk</method>
+			<source>value</source>
+			<direction>output</direction>
+			<oid>[% GET base_oid %].1.2.39</oid>
+		</mgpLimitMaxbytes>
+
+	</fields>
+</interface>
